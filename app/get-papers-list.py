@@ -1,10 +1,11 @@
 import click
+import pandas as pd
 from .pubmed.fetcher import search_pubmed, fetch_paper_details
 from typing import Optional
 
 @click.command()
 @click.argument("query", type=str)
-@click.option("-f", "--file", type=str, help="Output CSV file name.")
+@click.option("-f", "--file", type=str, default="output.csv", help="Output CSV file name.")
 @click.option("--max-results", type=int, default=10, help="Number of results to fetch (default: 10).")
 def main(query: str, file: Optional[str], max_results: int):
     try:
@@ -20,7 +21,13 @@ def main(query: str, file: Optional[str], max_results: int):
         if not results:
             click.echo("No relevant papers found with non-academic affiliations.")
             return
-        print(results)
+        
+        df = pd.DataFrame(results)
+
+        if file:
+            df.to_csv(file, index=False)
+        else:
+            click.echo(df.to_string(index=False))
 
     except requests.RequestException as e:
         click.echo(f"Error fetching data from PubMed: {e}", err=True)
