@@ -1,5 +1,5 @@
 [project]
-name = "aganitha-project"
+name = "app"
 version = "0.1.0"
 description = ""
 authors = [
@@ -8,8 +8,11 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "click (>=8.1.8,<9.0.0)"
 ]
 
+[tool.poetry.scripts]
+get-papers-list = "app.get-papers-list:main"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
